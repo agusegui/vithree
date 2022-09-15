@@ -12,13 +12,6 @@ varying vec3 vPos;
 
 float PI = 3.141592653589793238;
 
-
-
 void main() {
-
-   
-
-
     gl_FragColor = vec4(vUv, 1., 1.);
-    // gl_FragColor = vec4(center, 1., 1.);
 }
