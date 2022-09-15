@@ -14,9 +14,6 @@ import fox2 from "./img/fox1.png";
 
 export default class Sketch {
   constructor(options) {
-    /*
-    INIT
-    */
     this.scene = new THREE.Scene();
     this.container = options.dom;
 
@@ -45,7 +42,7 @@ export default class Sketch {
     this.camera.position.set(0, 0, 1.3);
 
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
-    this.controls.enableDamping = true; // an animation loop is required when either damping or auto-rotation are enabled
+    this.controls.enableDamping = true;
     this.controls.dampingFactor = 0.05;
 
     /*
@@ -63,17 +60,6 @@ export default class Sketch {
     this.setupResize();
     this.mouseMovement();
     this.render();
-  }
-
-  cubeTarget() {
-    this.cubeRenderTarget = new THREE.WebGLCubeRenderTarget(256, {
-      format: THREE.RGBAFormat,
-      generateMipmaps: true,
-      minFilter: THREE.LinearMipMapLinearFilter,
-      encoding: THREE.sRGBEncoding,
-    });
-
-    this.cubeCamera = new THREE.CubeCamera(0.1, 10, this.cubeRenderTarget);
   }
 
   settings() {
@@ -144,9 +130,6 @@ export default class Sketch {
 
   mouseMovement() {
     window.addEventListener("mousemove", (event) => {
-      // calculate mouse position in normalized device coordinates
-      // (-1 to +1) for both components
-
       this.uMouse.x = event.clientX / this.width;
       this.uMouse.y = 1 - event.clientY / this.height;
 
@@ -155,21 +138,18 @@ export default class Sketch {
 
     window.addEventListener("mousedown", (e) => {
       gsap.to(this.parameters, {
-        duration: 0.5,
+        duration: 1,
         uProgress: 1,
         ease: "power3.out",
       });
 
       if (this.parameters.uProgress === 1) {
         gsap.to(this.parameters, {
-          duration: 0.5,
+          duration: 1,
           uProgress: 0,
           ease: "power3.out",
         });
       }
-
-      // console.log('down');
-      // this.material.uniforms.uProgress.value = 1
     });
   }
 
@@ -177,6 +157,7 @@ export default class Sketch {
     this.elapsedTime = this.clock.getElapsedTime();
 
     this.material.uniforms.uTime.value = this.elapsedTime;
+    this.material.uniforms.uProgress.value = this.parameters.uProgress;
 
     this.controls.update();
 
